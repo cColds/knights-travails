@@ -42,6 +42,12 @@ class Knight {
 		);
 	}
 
+	logPath(moves) {
+		console.log(`You made it in ${moves.length} moves! Here's your path:`);
+		let i = 1;
+		moves.forEach((move) => console.log(move, `${i++}`));
+	}
+
 	move(destination = this.currentPosition) {
 		const queue = [this.currentPosition];
 		const moves = [];
@@ -54,11 +60,9 @@ class Knight {
 			queue.shift();
 		}
 
-		// console.log(`You made it in ${moves.length} moves! Here's your path:`);
-		// let i = 1;
-		// moves.forEach((move) => console.log(move, `${i++}`));
-
+		this.logPath(moves);
 		this.currentPosition = queue[0];
+
 		return true;
 	}
 }
