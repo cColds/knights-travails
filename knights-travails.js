@@ -13,9 +13,7 @@ class Knight {
 	}
 
 	isValidMove(move) {
-		if (move < 0 || move > 7 || move < 0 || move > 7) return false;
-
-		return true;
+		return move >= 0 && move <= 7;
 	}
 
 	possibleMoves() {
