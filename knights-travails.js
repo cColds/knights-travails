@@ -10,10 +10,13 @@ class Knight {
 	constructor() {
 		this.currentPosition = [0, 0];
 		this.board = Array.from({ length: 8 }, () => Array(8).fill(0));
+		this.board[0][0] = 1; // Mark edge of default current position to 1
 	}
 
-	isValidMove(move) {
-		return move >= 0 && move <= 7;
+	isValidMove = (move) => move >= 0 && move <= 7;
+
+	isDestination(move, destination) {
+		return JSON.stringify(move) === JSON.stringify(destination);
 	}
 
 	possibleMoves() {
@@ -34,18 +37,32 @@ class Knight {
 			[currentX - 1, currentY + 2],
 		];
 
-		const filterPossibleMoves = possibleMoves.filter(
+		return possibleMoves.filter(
 			(move) => this.isValidMove(move[0]) && this.isValidMove(move[1])
 		);
-
-		return filterPossibleMoves;
 	}
 
 	move(destination = this.currentPosition) {
-		this.currentPosition = destination;
+		const queue = [this.currentPosition];
+		const moves = [];
+		while (!this.isDestination(queue[0], destination)) {
+			const [x, y] = queue[0];
+			this.possibleMoves().forEach((move) => queue.push(move));
+			this.currentPosition = queue[0];
+			this.board[x][y] = 1;
+			moves.push(queue[0]);
+			queue.shift();
+		}
+
+		// console.log(`You made it in ${moves.length} moves! Here's your path:`);
+		// let i = 1;
+		// moves.forEach((move) => console.log(move, `${i++}`));
+
+		this.currentPosition = queue[0];
+		return true;
 	}
 }
 
 const knight = new Knight();
-knight.move([1, 2]);
+knight.move([0, 2]);
 console.log(knight.currentPosition);
