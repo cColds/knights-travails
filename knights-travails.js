@@ -41,8 +41,11 @@ class Knight {
 		return filterPossibleMoves;
 	}
 
-	move(start, end) {}
+	move(destination = this.currentPosition) {
+		this.currentPosition = destination;
+	}
 }
 
 const knight = new Knight();
-console.log(knight.possibleMoves());
+knight.move([1, 2]);
+console.log(knight.currentPosition);
