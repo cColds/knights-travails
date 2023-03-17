@@ -17,9 +17,9 @@ class Chess {
 		const [destinationX, destinationY] = destination;
 		if (
 			destinationX < 0 ||
-			destinationX > 8 ||
+			destinationX > 7 ||
 			destinationY < 0 ||
-			destinationY > 8
+			destinationY > 7
 		)
 			return false;
 
