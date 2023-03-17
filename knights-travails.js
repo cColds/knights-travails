@@ -43,8 +43,10 @@ class Knight {
 	}
 
 	logPath(moves) {
-		console.log(`You made it in ${moves.length} moves! Here's your path:`);
-		let i = 1;
+		console.log(
+			`You made it in ${moves.length - 1} moves! Here's your path:`
+		);
+		let i = 0;
 		moves.forEach((move) => console.log(move, `${i++}`));
 	}
 
@@ -60,8 +62,9 @@ class Knight {
 			queue.shift();
 		}
 
-		this.logPath(moves);
 		this.currentPosition = queue[0];
+		moves.push(this.currentPosition);
+		this.logPath(moves);
 
 		return true;
 	}
