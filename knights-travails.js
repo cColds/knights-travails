@@ -3,7 +3,7 @@ class Knight {
 		this.board = Array.from({ length: 8 }, () => Array(8).fill(0));
 	}
 
-	isValidMove = (move) => move >= 0 && move <= 7;
+	isValidMove = ([x, y]) => x >= 0 && x <= 7 && y >= 0 && y <= 7;
 
 	isPositionMatching(positionA, positionB) {
 		return JSON.stringify(positionA) === JSON.stringify(positionB);
@@ -28,10 +28,7 @@ class Knight {
 		];
 
 		return possibleMoves.filter(
-			([x, y]) =>
-				this.isValidMove(x) &&
-				this.isValidMove(y) &&
-				this.board[x][y] === 0
+			([x, y]) => this.isValidMove([x, y]) && this.board[x][y] === 0
 		);
 	}
 
@@ -62,7 +59,25 @@ class Knight {
 		}
 	}
 
+	isInvalidMove(start, end) {
+		return (
+			!Array.isArray(start) ||
+			!Array.isArray(end) ||
+			start.length !== 2 ||
+			end.length !== 2 ||
+			start.every((item) => !Number.isInteger(item)) ||
+			end.every((item) => !Number.isInteger(item)) ||
+			!this.isValidMove(start) ||
+			!this.isValidMove(end)
+		);
+	}
+
 	move(start = [0, 0], end = [0, 0]) {
+		if (this.isInvalidMove(start, end)) {
+			console.log("Invalid move");
+			return;
+		}
+
 		const queue = [start];
 		this.currentPosition = start;
 		this.board[start[0]][start[1]] = start;
@@ -82,7 +97,7 @@ class Knight {
 }
 
 const knight = new Knight();
-knight.move([0, 0], [1, 2]);
+knight.move();
 
 // TODO: Error handling
 // TODO: Clean code
