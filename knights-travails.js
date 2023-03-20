@@ -1,16 +1,8 @@
-// TODO ✔️: Create a Knight class
-// TODO ✔️: Create an object of 8x8 adjacency matrix
-// TODO ✔️: Create a method to move knight pieces two forward each direction, and left and right in four directions
-// TODO ✔️: Create a method to prevent out of bound moves for the knight
-
-// TODO: Create a method to from a (start point) to b (end point), and output each move
-// TODO: Store the knight's moves in a graph
-
 class Knight {
 	constructor() {
 		this.currentPosition = [0, 0];
 		this.board = Array.from({ length: 8 }, () => Array(8).fill(0));
-		this.board[0][0] = 1; // Mark edge of default current position to 1
+		this.board[0][0] = [0, 0]; // Mark edge of default current position
 	}
 
 	isValidMove = (move) => move >= 0 && move <= 7;
@@ -38,38 +30,53 @@ class Knight {
 		];
 
 		return possibleMoves.filter(
-			(move) => this.isValidMove(move[0]) && this.isValidMove(move[1])
+			([x, y]) =>
+				this.isValidMove(x) &&
+				this.isValidMove(y) &&
+				this.board[x][y] === 0
 		);
 	}
 
-	logPath(moves) {
-		console.log(
-			`You made it in ${moves.length - 1} moves! Here's your path:`
-		);
-		let i = 0;
-		moves.forEach((move) => console.log(move, `${i++}`));
-	}
-
-	move(destination = this.currentPosition) {
-		const queue = [this.currentPosition];
-		const moves = [];
-		while (!this.isDestination(queue[0], destination)) {
-			const [x, y] = queue[0];
-			this.possibleMoves().forEach((move) => queue.push(move));
-			this.currentPosition = queue[0];
-			this.board[x][y] = 1;
-			moves.push(queue[0]);
-			queue.shift();
+	logPath(start, [destinationX, destinationY]) {
+		const backtrackMoves = [];
+		let [currentX, currentY] = this.board[destinationX][destinationY];
+		while (JSON.stringify([currentX, currentY]) !== JSON.stringify(start)) {
+			backtrackMoves.push([currentX, currentY]);
+			[currentX, currentY] = this.board[currentX][currentY];
 		}
 
-		this.currentPosition = queue[0];
-		moves.push(this.currentPosition);
-		this.logPath(moves);
+		backtrackMoves.push(start);
+		backtrackMoves.unshift([destinationX, destinationY]);
 
-		return true;
+		console.log(
+			`You made it in ${
+				backtrackMoves.length - 1
+			} moves! Here's your path:`
+		);
+
+		let i = backtrackMoves.length - 1;
+		while (i >= 0) {
+			console.log(backtrackMoves[i]);
+			i--;
+		}
+	}
+
+	move(start, destination = this.currentPosition) {
+		const queue = [this.currentPosition];
+
+		while (!this.isDestination(queue[0], destination)) {
+			queue.shift();
+
+			this.possibleMoves().forEach(([x, y]) => {
+				queue.push([x, y]);
+				this.board[x][y] = this.currentPosition;
+			});
+
+			this.currentPosition = queue[0];
+		}
+		this.logPath(start, destination);
 	}
 }
 
 const knight = new Knight();
-knight.move([0, 2]);
-console.log(knight.currentPosition);
+knight.move([0, 0], [7, 7]);
