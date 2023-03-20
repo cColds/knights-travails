@@ -65,8 +65,8 @@ class Knight {
 			!Array.isArray(end) ||
 			start.length !== 2 ||
 			end.length !== 2 ||
-			start.every((item) => !Number.isInteger(item)) ||
-			end.every((item) => !Number.isInteger(item)) ||
+			start.some((item) => !Number.isInteger(item)) ||
+			end.some((item) => !Number.isInteger(item)) ||
 			!this.isValidMove(start) ||
 			!this.isValidMove(end)
 		);
@@ -97,7 +97,7 @@ class Knight {
 }
 
 const knight = new Knight();
-knight.move();
+knight.move([1, 2], [2, 2]);
 
 // TODO: Error handling
 // TODO: Clean code
