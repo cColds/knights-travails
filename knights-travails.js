@@ -3,7 +3,7 @@ class Knight {
 		this.board = Array.from({ length: 8 }, () => Array(8).fill(0));
 	}
 
-	isValidMove = ([x, y]) => x >= 0 && x <= 7 && y >= 0 && y <= 7;
+	isOutOfBounds = ([x, y]) => x < 0 || x > 7 || y < 0 || y > 7;
 
 	isPositionMatching(positionA, positionB) {
 		return JSON.stringify(positionA) === JSON.stringify(positionB);
@@ -28,7 +28,7 @@ class Knight {
 		];
 
 		return possibleMoves.filter(
-			([x, y]) => this.isValidMove([x, y]) && this.board[x][y] === 0
+			([x, y]) => !this.isOutOfBounds([x, y]) && this.board[x][y] === 0
 		);
 	}
 
@@ -38,11 +38,11 @@ class Knight {
 		while (true) {
 			if (this.isPositionMatching(start, [currentX, currentY])) {
 				backtrackMoves.push(start);
-				const isMoveSingular = backtrackMoves.length - 1 === 1;
+				const isOneMove = backtrackMoves.length - 1 === 1;
 
 				console.log(
 					`You made it in ${backtrackMoves.length - 1} ${
-						isMoveSingular ? "move" : "moves"
+						isOneMove ? "move" : "moves"
 					}! Here's your path:`
 				);
 				break;
@@ -59,21 +59,20 @@ class Knight {
 		}
 	}
 
-	isInvalidMove(start, end) {
+	isValidMove(start, end) {
 		return (
-			!Array.isArray(start) ||
-			!Array.isArray(end) ||
-			start.length !== 2 ||
-			end.length !== 2 ||
-			start.some((item) => !Number.isInteger(item)) ||
-			end.some((item) => !Number.isInteger(item)) ||
-			!this.isValidMove(start) ||
-			!this.isValidMove(end)
+			Array.isArray(start) &&
+			Array.isArray(end) &&
+			start.length === 2 &&
+			end.length === 2 &&
+			[...start, ...end].some((item) => Number.isInteger(item)) &&
+			!this.isOutOfBounds(start) &&
+			!this.isOutOfBounds(end)
 		);
 	}
 
 	move(start = [0, 0], end = [0, 0]) {
-		if (this.isInvalidMove(start, end)) {
+		if (!this.isValidMove(start, end)) {
 			console.log("Invalid move");
 			return;
 		}
@@ -97,7 +96,7 @@ class Knight {
 }
 
 const knight = new Knight();
-knight.move([1, 2], [2, 2]);
+knight.move();
 
 // TODO: Error handling
 // TODO: Clean code
