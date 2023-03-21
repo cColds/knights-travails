@@ -5,9 +5,8 @@ class Knight {
 
 	static isOutOfBounds = ([x, y]) => x < 0 || x > 7 || y < 0 || y > 7;
 
-	static isPositionMatching(positionA, positionB) {
-		return JSON.stringify(positionA) === JSON.stringify(positionB);
-	}
+	static isPositionMatching = (positionA, positionB) =>
+		JSON.stringify(positionA) === JSON.stringify(positionB);
 
 	getPossibleMoves() {
 		const [currentX, currentY] = this.currentPosition;
@@ -28,7 +27,7 @@ class Knight {
 		];
 
 		return possibleMoves.filter(
-			([x, y]) => !this.isOutOfBounds([x, y]) && this.board[x][y] === 0
+			([x, y]) => !Knight.isOutOfBounds([x, y]) && this.board[x][y] === 0
 		);
 	}
 
@@ -36,7 +35,7 @@ class Knight {
 		const backtrackMoves = [[endX, endY]];
 		let [currentX, currentY] = this.board[endX][endY];
 		while (true) {
-			if (this.isPositionMatching(start, [currentX, currentY])) {
+			if (Knight.isPositionMatching(start, [currentX, currentY])) {
 				backtrackMoves.push(start);
 				const isOneMove = backtrackMoves.length - 1 === 1;
 
@@ -59,20 +58,20 @@ class Knight {
 		}
 	}
 
-	isValidMove(start, end) {
+	static isValidMove(start, end) {
 		return (
 			Array.isArray(start) &&
 			Array.isArray(end) &&
 			start.length === 2 &&
 			end.length === 2 &&
 			[...start, ...end].some((item) => Number.isInteger(item)) &&
-			!this.isOutOfBounds(start) &&
-			!this.isOutOfBounds(end)
+			!Knight.isOutOfBounds(start) &&
+			!Knight.isOutOfBounds(end)
 		);
 	}
 
 	move(start = [0, 0], end = [0, 0]) {
-		if (!this.isValidMove(start, end)) {
+		if (!Knight.isValidMove(start, end)) {
 			console.log("Invalid move");
 			return;
 		}
@@ -81,7 +80,7 @@ class Knight {
 		this.currentPosition = start;
 		this.board[start[0]][start[1]] = start;
 
-		while (!this.isPositionMatching(queue[0], end)) {
+		while (!Knight.isPositionMatching(queue[0], end)) {
 			queue.shift();
 
 			this.getPossibleMoves().forEach(([x, y]) => {
