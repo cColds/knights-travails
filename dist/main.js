@@ -15,7 +15,7 @@
   \**********************/
 /***/ (() => {
 
-eval("console.log(\"jimmy\");\n\n\n//# sourceURL=webpack://knights-travails/./src/index.js?");
+eval("const squares = document.querySelectorAll(\".square\");\n\nsquares.forEach((square) =>\n\tsquare.addEventListener(\"click\", (e) => console.log(e.target))\n);\n\n\n//# sourceURL=webpack://knights-travails/./src/index.js?");
 
 /***/ })
 
