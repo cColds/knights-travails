@@ -1,4 +1,4 @@
-class Knight {
+export default class Knight {
 	constructor() {
 		this.board = Array.from({ length: 8 }, () => Array(8).fill(0));
 	}
@@ -93,10 +93,3 @@ class Knight {
 		this.logPath(start, end);
 	}
 }
-
-const knight = new Knight();
-knight.move();
-
-// TODO: Error handling ✓
-// TODO: Clean code
-// TODO (optional): add UI
