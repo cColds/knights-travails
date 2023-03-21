@@ -3,28 +3,28 @@ class Knight {
 		this.board = Array.from({ length: 8 }, () => Array(8).fill(0));
 	}
 
-	isOutOfBounds = ([x, y]) => x < 0 || x > 7 || y < 0 || y > 7;
+	static isOutOfBounds = ([x, y]) => x < 0 || x > 7 || y < 0 || y > 7;
 
-	isPositionMatching(positionA, positionB) {
+	static isPositionMatching(positionA, positionB) {
 		return JSON.stringify(positionA) === JSON.stringify(positionB);
 	}
 
 	getPossibleMoves() {
-		const [x, y] = this.currentPosition;
+		const [currentX, currentY] = this.currentPosition;
 
 		const possibleMoves = [
 			// top left
-			[x + 1, y - 2],
-			[x + 2, y - 1],
+			[currentX + 1, currentY - 2],
+			[currentX + 2, currentY - 1],
 			// top right
-			[x + 2, y + 1],
-			[x + 1, y + 2],
+			[currentX + 2, currentY + 1],
+			[currentX + 1, currentY + 2],
 			// bottom left
-			[x - 1, y - 2],
-			[x - 2, y - 1],
+			[currentX - 1, currentY - 2],
+			[currentX - 2, currentY - 1],
 			// bottom right
-			[x - 2, y + 1],
-			[x - 1, y + 2],
+			[currentX - 2, currentY + 1],
+			[currentX - 1, currentY + 2],
 		];
 
 		return possibleMoves.filter(
@@ -55,7 +55,7 @@ class Knight {
 		let i = backtrackMoves.length - 1;
 		while (i >= 0) {
 			console.log(backtrackMoves[i]);
-			i--;
+			i -= 1;
 		}
 	}
 
@@ -98,6 +98,6 @@ class Knight {
 const knight = new Knight();
 knight.move();
 
-// TODO: Error handling
+// TODO: Error handling ✓
 // TODO: Clean code
 // TODO (optional): add UI
