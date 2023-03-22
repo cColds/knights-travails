@@ -31,25 +31,30 @@ export default class Knight {
 		);
 	}
 
-	logPath(start, [endX, endY]) {
+	getPath(start, [endX, endY]) {
 		const backtrackMoves = [[endX, endY]];
 		let [currentX, currentY] = this.board[endX][endY];
 		while (true) {
 			if (Knight.isPositionMatching(start, [currentX, currentY])) {
 				backtrackMoves.push(start);
-				const isOneMove = backtrackMoves.length - 1 === 1;
-
-				console.log(
-					`You made it in ${backtrackMoves.length - 1} ${
-						isOneMove ? "move" : "moves"
-					}! Here's your path:`
-				);
 				break;
 			}
 
 			backtrackMoves.push([currentX, currentY]);
 			[currentX, currentY] = this.board[currentX][currentY];
 		}
+
+		return backtrackMoves;
+	}
+
+	static logPath(backtrackMoves) {
+		const isOneMove = backtrackMoves.length - 1 === 1;
+
+		console.log(
+			`You made it in ${backtrackMoves.length - 1} ${
+				isOneMove ? "move" : "moves"
+			}! Here's your path:`
+		);
 
 		let i = backtrackMoves.length - 1;
 		while (i >= 0) {
@@ -90,6 +95,8 @@ export default class Knight {
 
 			this.currentPosition = queue[0];
 		}
-		this.logPath(start, end);
+		Knight.logPath(this.getPath(start, end));
+
+		return this.getPath(start, end);
 	}
 }

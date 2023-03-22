@@ -41,13 +41,13 @@ main {
 	z-index: 1;
 }
 
-.square.piece {
+.square.knight {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 
-.square.piece::after {
+.square.knight::after {
 	content: url("./assets/white-knight.svg");
 	width: 100%;
 	height: 100%;
