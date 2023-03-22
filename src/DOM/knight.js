@@ -1,4 +1,4 @@
-// import Knight from "../knights-travails";
+import Knight from "../knights-travails";
 
 const board = document.querySelector(".board");
 board.addEventListener("click", (e) => {
@@ -18,5 +18,5 @@ function setSquareCoordinates() {
 	}
 }
 setSquareCoordinates();
-// let jimmy = new Knight();
-// console.log(jimmy.move());
+const jimmy = new Knight();
+console.log(jimmy.move([0, 0], [3, 3]));

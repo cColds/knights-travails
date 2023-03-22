@@ -7,15 +7,16 @@
  * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
  */
 /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./src/DOM/knight.js":
 /*!***************************!*\
   !*** ./src/DOM/knight.js ***!
   \***************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("// import Knight from \"../knights-travails\";\n\nconst board = document.querySelector(\".board\");\nboard.addEventListener(\"click\", (e) => {\n\tconst isKnightOnBoard = document.querySelector(\".knight\");\n\tif (isKnightOnBoard) return; // Prevent multiple knights from spawning\n\n\te.target.classList.add(\"knight\");\n});\n\nfunction setSquareCoordinates() {\n\tlet i = 0;\n\tfor (let x = 7; x >= 0; x -= 1) {\n\t\tfor (let y = 0; y < 8; y += 1) {\n\t\t\tboard.children[i].dataset.coordinates = `[${x}, ${y}]`;\n\t\t\ti += 1;\n\t\t}\n\t}\n}\nsetSquareCoordinates();\n// let jimmy = new Knight();\n// console.log(jimmy.move());\n\n\n//# sourceURL=webpack://knights-travails/./src/DOM/knight.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _knights_travails__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../knights-travails */ \"./src/knights-travails.js\");\n\n\nconst board = document.querySelector(\".board\");\nboard.addEventListener(\"click\", (e) => {\n\tconst isKnightOnBoard = document.querySelector(\".knight\");\n\tif (isKnightOnBoard) return; // Prevent multiple knights from spawning\n\n\te.target.classList.add(\"knight\");\n});\n\nfunction setSquareCoordinates() {\n\tlet i = 0;\n\tfor (let x = 7; x >= 0; x -= 1) {\n\t\tfor (let y = 0; y < 8; y += 1) {\n\t\t\tboard.children[i].dataset.coordinates = `[${x}, ${y}]`;\n\t\t\ti += 1;\n\t\t}\n\t}\n}\nsetSquareCoordinates();\nconst jimmy = new _knights_travails__WEBPACK_IMPORTED_MODULE_0__[\"default\"]();\nconsole.log(jimmy.move([0, 0], [3, 3]));\n\n\n//# sourceURL=webpack://knights-travails/./src/DOM/knight.js?");
 
 /***/ }),
 
@@ -25,8 +26,7 @@ eval("// import Knight from \"../knights-travails\";\n\nconst board = document.q
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _knights_travails__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./knights-travails */ \"./src/knights-travails.js\");\n/* harmony import */ var _DOM_knight__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DOM/knight */ \"./src/DOM/knight.js\");\n/* harmony import */ var _DOM_knight__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_DOM_knight__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\n\n//# sourceURL=webpack://knights-travails/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _knights_travails__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./knights-travails */ \"./src/knights-travails.js\");\n/* harmony import */ var _DOM_knight__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DOM/knight */ \"./src/DOM/knight.js\");\n\n\n\n\n//# sourceURL=webpack://knights-travails/./src/index.js?");
 
 /***/ }),
 
@@ -36,8 +36,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _kni
   \*********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ Knight)\n/* harmony export */ });\nclass Knight {\n\tconstructor() {\n\t\tthis.board = Array.from({ length: 8 }, () => Array(8).fill(0));\n\t}\n\n\tstatic isOutOfBounds = ([x, y]) => x < 0 || x > 7 || y < 0 || y > 7;\n\n\tstatic isPositionMatching = (positionA, positionB) =>\n\t\tJSON.stringify(positionA) === JSON.stringify(positionB);\n\n\tgetPossibleMoves() {\n\t\tconst [currentX, currentY] = this.currentPosition;\n\n\t\tconst possibleMoves = [\n\t\t\t// top left\n\t\t\t[currentX + 1, currentY - 2],\n\t\t\t[currentX + 2, currentY - 1],\n\t\t\t// top right\n\t\t\t[currentX + 2, currentY + 1],\n\t\t\t[currentX + 1, currentY + 2],\n\t\t\t// bottom left\n\t\t\t[currentX - 1, currentY - 2],\n\t\t\t[currentX - 2, currentY - 1],\n\t\t\t// bottom right\n\t\t\t[currentX - 2, currentY + 1],\n\t\t\t[currentX - 1, currentY + 2],\n\t\t];\n\n\t\treturn possibleMoves.filter(\n\t\t\t([x, y]) => !Knight.isOutOfBounds([x, y]) && this.board[x][y] === 0\n\t\t);\n\t}\n\n\tgetPath(start, [endX, endY]) {\n\t\tconst backtrackMoves = [[endX, endY]];\n\t\tlet [currentX, currentY] = this.board[endX][endY];\n\t\twhile (true) {\n\t\t\tif (Knight.isPositionMatching(start, [currentX, currentY])) {\n\t\t\t\tbacktrackMoves.push(start);\n\t\t\t\tbreak;\n\t\t\t}\n\n\t\t\tbacktrackMoves.push([currentX, currentY]);\n\t\t\t[currentX, currentY] = this.board[currentX][currentY];\n\t\t}\n\n\t\treturn backtrackMoves;\n\t}\n\n\tstatic logPath(backtrackMoves) {\n\t\tconst isOneMove = backtrackMoves.length - 1 === 1;\n\n\t\tconsole.log(\n\t\t\t`You made it in ${backtrackMoves.length - 1} ${\n\t\t\t\tisOneMove ? \"move\" : \"moves\"\n\t\t\t}! Here's your path:`\n\t\t);\n\n\t\tlet i = backtrackMoves.length - 1;\n\t\twhile (i >= 0) {\n\t\t\tconsole.log(backtrackMoves[i]);\n\t\t\ti -= 1;\n\t\t}\n\t}\n\n\tstatic isValidMove(start, end) {\n\t\treturn (\n\t\t\tArray.isArray(start) &&\n\t\t\tArray.isArray(end) &&\n\t\t\tstart.length === 2 &&\n\t\t\tend.length === 2 &&\n\t\t\t[...start, ...end].some((item) => Number.isInteger(item)) &&\n\t\t\t!Knight.isOutOfBounds(start) &&\n\t\t\t!Knight.isOutOfBounds(end)\n\t\t);\n\t}\n\n\tmove(start = [0, 0], end = [0, 0]) {\n\t\tif (!Knight.isValidMove(start, end)) {\n\t\t\tconsole.log(\"Invalid move\");\n\t\t\treturn;\n\t\t}\n\n\t\tconst queue = [start];\n\t\tthis.currentPosition = start;\n\t\tthis.board[start[0]][start[1]] = start;\n\n\t\twhile (!Knight.isPositionMatching(queue[0], end)) {\n\t\t\tqueue.shift();\n\n\t\t\tthis.getPossibleMoves().forEach(([x, y]) => {\n\t\t\t\tqueue.push([x, y]);\n\t\t\t\tthis.board[x][y] = this.currentPosition;\n\t\t\t});\n\n\t\t\tthis.currentPosition = queue[0];\n\t\t}\n\t\tKnight.logPath(this.getPath(start, end));\n\n\t\treturn this.getPath(start, end);\n\t}\n}\n\n\n//# sourceURL=webpack://knights-travails/./src/knights-travails.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ Knight)\n/* harmony export */ });\nclass Knight {\n\tconstructor() {\n\t\tthis.board = Array.from({ length: 8 }, () => Array(8).fill(0));\n\t}\n\n\tstatic isOutOfBounds = ([x, y]) => x < 0 || x > 7 || y < 0 || y > 7;\n\n\tstatic isPositionMatching = (positionA, positionB) =>\n\t\tJSON.stringify(positionA) === JSON.stringify(positionB);\n\n\tgetPossibleMoves() {\n\t\tconst [currentX, currentY] = this.currentPosition;\n\n\t\tconst possibleMoves = [\n\t\t\t// top left\n\t\t\t[currentX + 1, currentY - 2],\n\t\t\t[currentX + 2, currentY - 1],\n\t\t\t// top right\n\t\t\t[currentX + 2, currentY + 1],\n\t\t\t[currentX + 1, currentY + 2],\n\t\t\t// bottom left\n\t\t\t[currentX - 1, currentY - 2],\n\t\t\t[currentX - 2, currentY - 1],\n\t\t\t// bottom right\n\t\t\t[currentX - 2, currentY + 1],\n\t\t\t[currentX - 1, currentY + 2],\n\t\t];\n\n\t\treturn possibleMoves.filter(\n\t\t\t([x, y]) => !Knight.isOutOfBounds([x, y]) && this.board[x][y] === 0\n\t\t);\n\t}\n\n\tgetPath(start, [endX, endY]) {\n\t\tconst backtrackMoves = [[endX, endY]];\n\t\tlet [currentX, currentY] = this.board[endX][endY];\n\t\twhile (true) {\n\t\t\tif (Knight.isPositionMatching(start, [currentX, currentY])) {\n\t\t\t\tbacktrackMoves.push(start);\n\t\t\t\tbreak;\n\t\t\t}\n\n\t\t\tbacktrackMoves.push([currentX, currentY]);\n\t\t\t[currentX, currentY] = this.board[currentX][currentY];\n\t\t}\n\n\t\treturn backtrackMoves.reverse();\n\t}\n\n\tstatic logPath(backtrackMoves) {\n\t\tconst isOneMove = backtrackMoves.length - 1 === 1;\n\n\t\tconsole.log(\n\t\t\t`You made it in ${backtrackMoves.length - 1} ${\n\t\t\t\tisOneMove ? \"move\" : \"moves\"\n\t\t\t}! Here's your path:`\n\t\t);\n\n\t\tlet i = 0;\n\t\twhile (i < backtrackMoves.length) {\n\t\t\tconsole.log(backtrackMoves[i]);\n\t\t\ti += 1;\n\t\t}\n\t}\n\n\tstatic isValidMove(start, end) {\n\t\treturn (\n\t\t\tArray.isArray(start) &&\n\t\t\tArray.isArray(end) &&\n\t\t\tstart.length === 2 &&\n\t\t\tend.length === 2 &&\n\t\t\t[...start, ...end].some((item) => Number.isInteger(item)) &&\n\t\t\t!Knight.isOutOfBounds(start) &&\n\t\t\t!Knight.isOutOfBounds(end)\n\t\t); // there is bug if you nest arrays\n\t}\n\n\tmove(start = [0, 0], end = [0, 0]) {\n\t\tif (!Knight.isValidMove(start, end)) {\n\t\t\tconsole.log(\"Invalid move\");\n\t\t\treturn;\n\t\t}\n\n\t\tconst queue = [start];\n\t\tthis.currentPosition = start;\n\t\tthis.board[start[0]][start[1]] = start;\n\n\t\twhile (!Knight.isPositionMatching(queue[0], end)) {\n\t\t\tqueue.shift();\n\n\t\t\tthis.getPossibleMoves().forEach(([x, y]) => {\n\t\t\t\tqueue.push([x, y]);\n\t\t\t\tthis.board[x][y] = this.currentPosition;\n\t\t\t});\n\n\t\t\tthis.currentPosition = queue[0];\n\t\t}\n\t\tconsole.log(\"path\", this.getPath(start, end));\n\t\tKnight.logPath(this.getPath(start, end));\n\n\t\treturn this.getPath(start, end);\n\t}\n}\n\n\n//# sourceURL=webpack://knights-travails/./src/knights-travails.js?");
 
 /***/ })
 
@@ -68,18 +67,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports

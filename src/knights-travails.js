@@ -44,7 +44,7 @@ export default class Knight {
 			[currentX, currentY] = this.board[currentX][currentY];
 		}
 
-		return backtrackMoves;
+		return backtrackMoves.reverse();
 	}
 
 	static logPath(backtrackMoves) {
@@ -56,10 +56,10 @@ export default class Knight {
 			}! Here's your path:`
 		);
 
-		let i = backtrackMoves.length - 1;
-		while (i >= 0) {
+		let i = 0;
+		while (i < backtrackMoves.length) {
 			console.log(backtrackMoves[i]);
-			i -= 1;
+			i += 1;
 		}
 	}
 
@@ -72,7 +72,7 @@ export default class Knight {
 			[...start, ...end].some((item) => Number.isInteger(item)) &&
 			!Knight.isOutOfBounds(start) &&
 			!Knight.isOutOfBounds(end)
-		);
+		); // there is bug if you nest arrays
 	}
 
 	move(start = [0, 0], end = [0, 0]) {
@@ -95,6 +95,7 @@ export default class Knight {
 
 			this.currentPosition = queue[0];
 		}
+		console.log("path", this.getPath(start, end));
 		Knight.logPath(this.getPath(start, end));
 
 		return this.getPath(start, end);
