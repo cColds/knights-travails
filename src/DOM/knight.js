@@ -2,42 +2,44 @@ import Knight from "../knights-travails";
 
 const board = document.querySelector(".board");
 const knight = new Knight();
-async function handleSquareClick(e) {
-	if (knight.currentPosition) {
-		knight.start = knight.currentPosition;
-		knight.end = JSON.parse(e.target.dataset.coordinates);
-	}
-	if (knight.start == null) {
-		knight.start = JSON.parse(e.target.dataset.coordinates);
-		e.target.classList.add("knight");
-		console.log("start");
-		return;
-	}
 
-	if (knight.end == null) {
-		knight.end = JSON.parse(e.target.dataset.coordinates);
-		console.log("end");
-	}
+function setStartAndEndCoordinates(e) {
+	knight.start = knight.currentPosition;
+	knight.end = JSON.parse(e.target.dataset.coordinates);
+	console.log("Set start and end coordinates");
+}
 
-	const path = knight.move(knight.start, knight.end);
-	console.log(path);
-	let i = 0;
-	while (i < path.length) {
-		const knightSprite = document.querySelector(".knight");
-		knightSprite.classList.remove("knight");
-
-		const nextPosition = document.querySelector(
-			`[data-coordinates='${JSON.stringify(path[i])}']`
+async function animateKnightPath(knightPath) {
+	for (let i = 0; i < knightPath.length; i += 1) {
+		const currentKnightSpritePosition = document.querySelector(".knight");
+		const nextKnightSpritePosition = document.querySelector(
+			`[data-coordinates='[${knightPath[i]}]']`
 		);
-		nextPosition.classList.add("knight");
-		await new Promise((resolve) => setTimeout(resolve, 1000));
-		nextPosition.classList.add("knight");
+		currentKnightSpritePosition.classList.remove("knight");
+		nextKnightSpritePosition.classList.add("knight");
 
-		i += 1;
-		console.log(i);
+		await new Promise((resolve) => setTimeout(resolve, 1000));
 	}
+}
+
+function handleSquareClick(e) {
+	const isKnightPlaced = document.querySelector(".knight");
+	if (isKnightPlaced == null) {
+		e.target.classList.add("knight");
+		knight.currentPosition = JSON.parse(e.target.dataset.coordinates);
+		console.log("Knight placed");
+		return; // Need to click another square to get end point
+	}
+
+	setStartAndEndCoordinates(e);
+
+	const knightPath = knight.move(knight.start, knight.end);
+	animateKnightPath(knightPath);
+	Knight.logPath(knightPath);
+
 	knight.currentPosition = knight.end;
-	knight.resetStartAndEnd();
+	knight.start = null;
+	knight.end = null;
 }
 
 function setSquareCoordinates() {
@@ -52,3 +54,4 @@ function setSquareCoordinates() {
 setSquareCoordinates();
 
 board.addEventListener("click", (e) => handleSquareClick(e));
+// TODO: prevent knight duplication

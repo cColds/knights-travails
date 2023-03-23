@@ -1,9 +1,6 @@
 export default class Knight {
 	constructor() {
 		this.board = Array.from({ length: 8 }, () => Array(8).fill(0));
-		this.start = null;
-		this.end = null;
-		this.currentPosition = null;
 	}
 
 	static isOutOfBounds = ([x, y]) => x < 0 || x > 7 || y < 0 || y > 7;
@@ -35,7 +32,6 @@ export default class Knight {
 	}
 
 	getPath(start, [endX, endY]) {
-		console.log("gp", start, [endX, endY]);
 		const backtrackMoves = [[endX, endY]];
 		let [currentX, currentY] = this.board[endX][endY];
 		while (true) {
@@ -60,40 +56,34 @@ export default class Knight {
 			}! Here's your path:`
 		);
 
-		let i = 0;
-		while (i < backtrackMoves.length) {
+		for (let i = 0; i < backtrackMoves.length; i += 1) {
 			console.log(backtrackMoves[i]);
-			i += 1;
 		}
 	}
 
 	static isValidMove(start, end) {
 		return (
-			Array.isArray(start) &&
-			Array.isArray(end) &&
+			[start, end].every(Array.isArray) &&
+			[...start, ...end].every((item) => Number.isInteger(item)) &&
 			start.length === 2 &&
 			end.length === 2 &&
-			[...start, ...end].some((item) => Number.isInteger(item)) &&
 			!Knight.isOutOfBounds(start) &&
 			!Knight.isOutOfBounds(end)
 		); // there is bug if you nest arrays
 	}
 
 	move(start = [0, 0], end = [0, 0]) {
-		this.resetBoard();
-
 		if (!Knight.isValidMove(start, end)) {
 			console.log("Invalid move");
 			return;
 		}
+
+		this.resetBoard();
 		const queue = [start];
-		this.start = start;
-		this.end = end;
 		this.currentPosition = start;
 		this.board[start[0]][start[1]] = start;
-		let i = 0;
+
 		while (!Knight.isPositionMatching(queue[0], end)) {
-			console.log((i += 1));
 			queue.shift();
 			this.getPossibleMoves().forEach(([x, y]) => {
 				queue.push([x, y]);
@@ -102,16 +92,10 @@ export default class Knight {
 
 			this.currentPosition = queue[0];
 		}
-		Knight.logPath(this.getPath(start, end));
 		return this.getPath(start, end);
 	}
 
 	resetBoard() {
 		this.board = Array.from({ length: 8 }, () => Array(8).fill(0));
-	}
-
-	resetStartAndEnd() {
-		this.start = null;
-		this.end = null;
 	}
 }
