@@ -13,5 +13,7 @@ module.exports = {
 	rules: {
 		"prefer-destructuring": ["error", { object: true, array: false }],
 		"consistent-return": "off",
+		"no-await-in-loop": "off",
+		"no-promise-executor-return": "off",
 	},
 };
