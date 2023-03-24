@@ -23,6 +23,14 @@ body {
 	padding: 1rem;
 }
 
+header {
+	display: flex;
+	justify-content: center;
+	position: fixed;
+	top: 0;
+	width: 100%;
+}
+
 main {
 	display: grid;
 	grid-template-columns: repeat(8, 1fr);
@@ -32,6 +40,10 @@ main {
 	background-image: url("./assets/chessboard.svg");
 	position: relative;
 	z-index: 1;
+}
+
+.board.disable {
+	pointer-events: none;
 }
 
 .square {
