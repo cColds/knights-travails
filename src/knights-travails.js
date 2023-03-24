@@ -8,6 +8,31 @@ export default class Knight {
 	static isPositionMatching = (positionA, positionB) =>
 		JSON.stringify(positionA) === JSON.stringify(positionB);
 
+	static logPath(backtrackMoves) {
+		const isOneMove = backtrackMoves.length - 1 === 1;
+
+		console.log(
+			`You made it in ${backtrackMoves.length - 1} ${
+				isOneMove ? "move" : "moves"
+			}! Here's your path:`
+		);
+
+		for (let i = 0; i < backtrackMoves.length; i += 1) {
+			console.log(backtrackMoves[i]);
+		}
+	}
+
+	static isValidMove(start, end) {
+		return (
+			[start, end].every(Array.isArray) &&
+			[...start, ...end].every((item) => Number.isInteger(item)) &&
+			start.length === 2 &&
+			end.length === 2 &&
+			!Knight.isOutOfBounds(start) &&
+			!Knight.isOutOfBounds(end)
+		); // there is bug if you nest arrays
+	}
+
 	getPossibleMoves() {
 		const [currentX, currentY] = this.currentPosition;
 
@@ -45,31 +70,6 @@ export default class Knight {
 		}
 
 		return backtrackMoves.reverse();
-	}
-
-	static logPath(backtrackMoves) {
-		const isOneMove = backtrackMoves.length - 1 === 1;
-
-		console.log(
-			`You made it in ${backtrackMoves.length - 1} ${
-				isOneMove ? "move" : "moves"
-			}! Here's your path:`
-		);
-
-		for (let i = 0; i < backtrackMoves.length; i += 1) {
-			console.log(backtrackMoves[i]);
-		}
-	}
-
-	static isValidMove(start, end) {
-		return (
-			[start, end].every(Array.isArray) &&
-			[...start, ...end].every((item) => Number.isInteger(item)) &&
-			start.length === 2 &&
-			end.length === 2 &&
-			!Knight.isOutOfBounds(start) &&
-			!Knight.isOutOfBounds(end)
-		); // there is bug if you nest arrays
 	}
 
 	move(start = [0, 0], end = [0, 0]) {

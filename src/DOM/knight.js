@@ -2,11 +2,22 @@ import Knight from "../knights-travails";
 
 const board = document.querySelector(".board");
 const knight = new Knight();
+const knightMove = new Audio("../../dist/assets/knight-move.mp3");
 
 function setStartAndEndCoordinates(e) {
 	knight.start = knight.currentPosition;
 	knight.end = JSON.parse(e.target.dataset.coordinates);
 	console.log("Set start and end coordinates");
+}
+
+const sleep = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function playChessSounds() {
+	const promise = new Promise((resolve) => {
+		knightMove.onended = resolve;
+	});
+	knightMove.play();
+	return promise;
 }
 
 async function animateKnightPath(knightPath) {
@@ -20,9 +31,12 @@ async function animateKnightPath(knightPath) {
 		currentKnightSpritePosition.classList.remove("knight");
 		nextKnightSpritePosition.classList.add("knight");
 
-		promises.push(
-			await new Promise((resolve) => setTimeout(resolve, 1000))
-		);
+		promises.push(await sleep(500));
+
+		const isLastStep = i === knightPath.length - 1;
+		if (!isLastStep) {
+			await playChessSounds();
+		}
 	}
 	return Promise.all(promises);
 
