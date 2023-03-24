@@ -68,3 +68,21 @@ main {
 .square.test {
 	background-color: saddlebrown;
 }
+
+.square::before {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 30%;
+	height: 30%;
+	border-radius: 50%;
+	background-color: rgb(0, 0, 0);
+	opacity: 0.1;
+	display: none;
+}
+
+.square:hover:not(.knight)::before {
+	display: block;
+}
