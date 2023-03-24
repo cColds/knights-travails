@@ -10,6 +10,8 @@ function setStartAndEndCoordinates(e) {
 }
 
 async function animateKnightPath(knightPath) {
+	const promises = [];
+
 	for (let i = 0; i < knightPath.length; i += 1) {
 		const currentKnightSpritePosition = document.querySelector(".knight");
 		const nextKnightSpritePosition = document.querySelector(
@@ -18,11 +20,14 @@ async function animateKnightPath(knightPath) {
 		currentKnightSpritePosition.classList.remove("knight");
 		nextKnightSpritePosition.classList.add("knight");
 
-		await new Promise((resolve) => setTimeout(resolve, 1000));
+		promises.push(
+			await new Promise((resolve) => setTimeout(resolve, 1000))
+		);
 	}
+	return Promise.all(promises);
 }
 
-function handleSquareClick(e) {
+async function handleSquareClick(e) {
 	const isKnightPlaced = document.querySelector(".knight");
 	if (isKnightPlaced == null) {
 		e.target.classList.add("knight");
@@ -34,12 +39,14 @@ function handleSquareClick(e) {
 	setStartAndEndCoordinates(e);
 
 	const knightPath = knight.move(knight.start, knight.end);
-	animateKnightPath(knightPath);
+	board.style.pointerEvents = "none";
+	await animateKnightPath(knightPath);
+	console.log("aaa");
 	Knight.logPath(knightPath);
-
 	knight.currentPosition = knight.end;
 	knight.start = null;
 	knight.end = null;
+	board.style.pointerEvents = "auto";
 }
 
 function setSquareCoordinates() {
