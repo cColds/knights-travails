@@ -1,10 +1,8 @@
-import Knight from "../knights-travails";
+import Knight from "./knights-travails";
+import { move, check, capture, victory, playSound } from "./audio";
 
 const board = document.querySelector(".board");
 const knight = new Knight();
-const knightMove = new Audio("../../dist/assets/knight-move.mp3");
-const kingInCheck = new Audio("../../dist/assets/piano-check.mp3");
-const capture = new Audio("../../dist/assets/piano-capture.mp3");
 
 function setStartAndEndCoordinates(e) {
 	knight.start = knight.currentPosition;
@@ -13,13 +11,6 @@ function setStartAndEndCoordinates(e) {
 }
 
 const sleep = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-function playSound(soundEffect) {
-	return new Promise((resolve) => {
-		soundEffect.onended = () => resolve();
-		soundEffect.play();
-	});
-}
 
 async function animateKnightPath(knightPath) {
 	const promises = [];
@@ -35,17 +26,27 @@ async function animateKnightPath(knightPath) {
 		const isKingInCheck = i === knightPath.length - 2;
 
 		if (isKingInCheck) {
-			await playSound(kingInCheck);
+			await playSound(check);
 			playSound(capture);
+
+			nextKnightSpritePosition.classList.remove("knight");
+			document
+				.querySelector(`[data-coordinates='[${knightPath[i + 1]}]']`)
+				.classList.add("knight");
+
+			sleep(500).then(() => {
+				playSound(victory);
+			});
+			break;
 		} else if (!isEndPoint) {
 			promises.push(await sleep(500));
-			await playSound(knightMove);
+			await playSound(move);
 		}
 	}
 	return Promise.all(promises);
 }
 
-async function handleSquareClick(e) {
+function handleSquareClick(e) {
 	if (!e.target.classList.contains("square")) return;
 	if (e.target.classList.contains("knight")) return;
 
@@ -89,3 +90,9 @@ function setSquareCoordinates() {
 setSquareCoordinates();
 
 board.addEventListener("click", (e) => handleSquareClick(e));
+
+// TODO: Add king redness in check (prob ez with a bit of fiddling)
+// TODO: Add modal displaying checkmate in n moves
+// TODO: Style background and header better
+// TODO: Animate knight (prob too much effort)
+// TODO: why am i doing these things?
