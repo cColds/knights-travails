@@ -35,15 +35,16 @@ async function animateKnightPath(knightPath) {
 
 		const isLastStep = i === knightPath.length - 1;
 		if (!isLastStep) {
+			// prevent sound played one extra
 			await playChessSounds();
 		}
 	}
 	return Promise.all(promises);
-
-	// Uncaught (in promise) SyntaxError: "undefined" is not valid JSON
 }
 
 async function handleSquareClick(e) {
+	if (!e.target.className.includes("square")) return;
+
 	const isKnightPlaced = document.querySelector(".knight");
 	if (isKnightPlaced == null) {
 		e.target.classList.add("knight");
