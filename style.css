@@ -51,18 +51,15 @@ main {
 	cursor: pointer;
 	position: relative;
 	z-index: 1;
+	width: 100%;
+	height: 100%;
 }
 
 .square.knight {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-}
-
-.square.knight::after {
 	content: url("./assets/white-knight.svg");
-	width: 100%;
-	height: 100%;
 }
 
 .square.test {
@@ -85,4 +82,8 @@ main {
 
 .square:hover:not(.knight)::before {
 	display: block;
+}
+
+.square.king {
+	content: url("./assets/black-king.svg");
 }
