@@ -15,5 +15,6 @@ module.exports = {
 		"consistent-return": "off",
 		"no-await-in-loop": "off",
 		"no-promise-executor-return": "off",
+		"no-param-reassign": "off",
 	},
 };

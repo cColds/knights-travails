@@ -3,6 +3,8 @@ import Knight from "../knights-travails";
 const board = document.querySelector(".board");
 const knight = new Knight();
 const knightMove = new Audio("../../dist/assets/knight-move.mp3");
+const kingInCheck = new Audio("../../dist/assets/piano-check.mp3");
+const capture = new Audio("../../dist/assets/piano-capture.mp3");
 
 function setStartAndEndCoordinates(e) {
 	knight.start = knight.currentPosition;
@@ -12,16 +14,15 @@ function setStartAndEndCoordinates(e) {
 
 const sleep = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function playChessSounds() {
+function playSound(soundEffect) {
 	return new Promise((resolve) => {
-		knightMove.onended = () => resolve();
-		knightMove.play();
+		soundEffect.onended = () => resolve();
+		soundEffect.play();
 	});
 }
 
 async function animateKnightPath(knightPath) {
 	const promises = [];
-
 	for (let i = 0; i < knightPath.length; i += 1) {
 		const currentKnightSpritePosition = document.querySelector(".knight");
 		const nextKnightSpritePosition = document.querySelector(
@@ -30,10 +31,15 @@ async function animateKnightPath(knightPath) {
 		currentKnightSpritePosition.classList.remove("knight");
 		nextKnightSpritePosition.classList.add("knight");
 
-		const isLastStep = i === knightPath.length - 1;
-		if (!isLastStep) {
+		const isEndPoint = i === knightPath.length - 1;
+		const isKingInCheck = i === knightPath.length - 2;
+
+		if (isKingInCheck) {
+			await playSound(kingInCheck);
+			playSound(capture);
+		} else if (!isEndPoint) {
 			promises.push(await sleep(500));
-			await playChessSounds();
+			await playSound(knightMove);
 		}
 	}
 	return Promise.all(promises);
