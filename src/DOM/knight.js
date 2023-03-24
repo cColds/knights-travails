@@ -25,6 +25,8 @@ async function animateKnightPath(knightPath) {
 		);
 	}
 	return Promise.all(promises);
+
+	// Uncaught (in promise) SyntaxError: "undefined" is not valid JSON
 }
 
 async function handleSquareClick(e) {
