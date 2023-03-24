@@ -36,17 +36,17 @@ async function handleSquareClick(e) {
 		return; // Need to click another square to get end point
 	}
 
-	setStartAndEndCoordinates(e);
+	board.classList.add("disable");
 
+	setStartAndEndCoordinates(e);
 	const knightPath = knight.move(knight.start, knight.end);
-	board.style.pointerEvents = "none";
 	await animateKnightPath(knightPath);
-	console.log("aaa");
 	Knight.logPath(knightPath);
 	knight.currentPosition = knight.end;
 	knight.start = null;
 	knight.end = null;
-	board.style.pointerEvents = "auto";
+
+	board.classList.remove("disable");
 }
 
 function setSquareCoordinates() {
@@ -61,4 +61,3 @@ function setSquareCoordinates() {
 setSquareCoordinates();
 
 board.addEventListener("click", (e) => handleSquareClick(e));
-// TODO: prevent knight duplication
