@@ -12,12 +12,11 @@ function setStartAndEndCoordinates(e) {
 
 const sleep = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-async function playChessSounds() {
-	const promise = new Promise((resolve) => {
-		knightMove.onended = resolve;
+function playChessSounds() {
+	return new Promise((resolve) => {
+		knightMove.onended = () => resolve();
+		knightMove.play();
 	});
-	knightMove.play();
-	return promise;
 }
 
 async function animateKnightPath(knightPath) {
@@ -31,11 +30,9 @@ async function animateKnightPath(knightPath) {
 		currentKnightSpritePosition.classList.remove("knight");
 		nextKnightSpritePosition.classList.add("knight");
 
-		promises.push(await sleep(500));
-
 		const isLastStep = i === knightPath.length - 1;
 		if (!isLastStep) {
-			// prevent sound played one extra
+			promises.push(await sleep(500));
 			await playChessSounds();
 		}
 	}
@@ -43,7 +40,8 @@ async function animateKnightPath(knightPath) {
 }
 
 async function handleSquareClick(e) {
-	if (!e.target.className.includes("square")) return;
+	if (!e.target.classList.contains("square")) return;
+	if (e.target.classList.contains("knight")) return;
 
 	const isKnightPlaced = document.querySelector(".knight");
 	if (isKnightPlaced == null) {
@@ -56,14 +54,21 @@ async function handleSquareClick(e) {
 	board.classList.add("disable");
 
 	setStartAndEndCoordinates(e);
-	const knightPath = knight.move(knight.start, knight.end);
-	await animateKnightPath(knightPath);
-	Knight.logPath(knightPath);
-	knight.currentPosition = knight.end;
-	knight.start = null;
-	knight.end = null;
+	const endPoint = document.querySelector(
+		`[data-coordinates='[${knight.end}]']`
+	);
+	endPoint.classList.add("king");
 
-	board.classList.remove("disable");
+	const knightPath = knight.move(knight.start, knight.end);
+	animateKnightPath(knightPath).then(() => {
+		endPoint.classList.remove("king");
+		Knight.logPath(knightPath);
+		knight.currentPosition = knight.end;
+		knight.start = null;
+		knight.end = null;
+
+		board.classList.remove("disable");
+	});
 }
 
 function setSquareCoordinates() {
