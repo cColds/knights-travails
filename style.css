@@ -62,10 +62,6 @@ main {
 	content: url("./assets/white-knight.svg");
 }
 
-.square.test {
-	background-color: saddlebrown;
-}
-
 .square::before {
 	content: "";
 	position: absolute;
