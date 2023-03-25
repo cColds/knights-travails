@@ -27,18 +27,20 @@ async function animateKnightPath(knightPath) {
 		const isKingInCheck = i === knightPath.length - 2;
 
 		if (isKingInCheck) {
+			const knightSpriteEndPoint = document.querySelector(
+				`[data-coordinates='[${knightPath[i + 1]}]']`
+			);
+			knightSpriteEndPoint.classList.add("check");
 			await playSound(check);
 			playSound(capture);
 
 			nextKnightSpritePosition.classList.remove("knight");
-			const knightSpriteEndPoint = document.querySelector(
-				`[data-coordinates='[${knightPath[i + 1]}]']`
-			);
 			knightSpriteEndPoint.classList.add("knight");
 
 			sleep(500).then(() => {
 				playSound(victory);
 			});
+
 			break;
 		} else if (!isEndPoint) {
 			promises.push(await sleep(500));
@@ -79,6 +81,7 @@ function handleSquareClick(e) {
 
 		await sleep(500);
 		viewStats(moves, knightPath);
+		endPoint.classList.remove("check");
 		board.classList.remove("disable");
 	});
 }
@@ -96,8 +99,5 @@ setSquareCoordinates();
 
 board.addEventListener("click", (e) => handleSquareClick(e));
 
-// TODO: Add king redness in check (prob ez with a bit of fiddling)
-// TODO: Add modal displaying checkmate in n moves
-// TODO: Style background and header better
-// TODO: Animate knight (prob too much effort)
-// TODO: why am i doing these things?
+// TODO: Clean code
+// TODO: Update UI
