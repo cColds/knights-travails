@@ -5,6 +5,7 @@ const victory = new Audio("../../dist/assets/piano-victory.mp3");
 
 function playSound(soundEffect) {
 	return new Promise((resolve) => {
+		soundEffect.volume = 0.5;
 		soundEffect.onended = () => resolve();
 		soundEffect.play();
 	});
