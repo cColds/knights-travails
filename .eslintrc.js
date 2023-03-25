@@ -16,5 +16,6 @@ module.exports = {
 		"no-await-in-loop": "off",
 		"no-promise-executor-return": "off",
 		"no-param-reassign": "off",
+		"no-restricted-syntax": "off",
 	},
 };

@@ -1,6 +1,6 @@
 import Knight from "../knights-travails";
 import { move, check, capture, victory, playSound } from "./audio";
-import viewStats from "../modal";
+import viewStats from "./modal";
 
 const board = document.querySelector(".board");
 const knight = new Knight();
@@ -8,43 +8,38 @@ const knight = new Knight();
 function setStartAndEndCoordinates(e) {
 	knight.start = knight.currentPosition;
 	knight.end = JSON.parse(e.target.dataset.coordinates);
-	console.log("Set start and end coordinates");
 }
 
 const sleep = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function animateKnightPath(knightPath) {
 	const promises = [];
-	for (let i = 0; i < knightPath.length; i += 1) {
-		const currentKnightSpritePosition = document.querySelector(".knight");
-		const nextKnightSpritePosition = document.querySelector(
-			`[data-coordinates='[${knightPath[i]}]']`
-		);
-		currentKnightSpritePosition.classList.remove("knight");
-		nextKnightSpritePosition.classList.add("trail");
-		nextKnightSpritePosition.classList.add("knight");
+	const getNextPosition = (i) =>
+		document.querySelector(`[data-coordinates='[${knightPath[i]}]']`);
 
-		const isEndPoint = i === knightPath.length - 1;
+	for (let i = 0; i < knightPath.length; i += 1) {
+		const currentPosition = document.querySelector(".knight");
+		const nextPosition = getNextPosition(i);
 		const isKingInCheck = i === knightPath.length - 2;
 
+		currentPosition.classList.remove("knight");
+		nextPosition.classList.add("knight", "trail");
+
 		if (isKingInCheck) {
-			const knightSpriteEndPoint = document.querySelector(
-				`[data-coordinates='[${knightPath[i + 1]}]']`
-			);
-			knightSpriteEndPoint.classList.add("check");
+			const endPoint = getNextPosition(i + 1);
+			endPoint.classList.add("check");
 			await playSound(check);
 			playSound(capture);
 
-			nextKnightSpritePosition.classList.remove("knight");
-			knightSpriteEndPoint.classList.add("knight");
-			knightSpriteEndPoint.classList.add("trail");
+			nextPosition.classList.remove("knight");
+			endPoint.classList.add("knight", "trail");
 
 			sleep(500).then(() => {
 				playSound(victory);
 			});
 
 			break;
-		} else if (!isEndPoint) {
+		} else {
 			promises.push(await sleep(500));
 			await playSound(move);
 		}
@@ -57,6 +52,19 @@ function clearTrail() {
 	squaresTrailed.forEach((square) => square.classList.remove("trail"));
 }
 
+function resetState() {
+	knight.currentPosition = knight.end;
+	knight.start = null;
+	knight.end = null;
+}
+
+function updateUI(moves, knightPath, endPoint) {
+	clearTrail();
+	viewStats(moves, knightPath);
+	endPoint.classList.remove("check");
+	board.classList.remove("disable");
+}
+
 function handleSquareClick(e) {
 	if (!e.target.classList.contains("square")) return;
 	if (e.target.classList.contains("knight")) return;
@@ -65,7 +73,6 @@ function handleSquareClick(e) {
 	if (isKnightPlaced == null) {
 		e.target.classList.add("knight");
 		knight.currentPosition = JSON.parse(e.target.dataset.coordinates);
-		console.log("Knight placed");
 		return; // Need to click another square to get end point
 	}
 
@@ -82,14 +89,9 @@ function handleSquareClick(e) {
 	animateKnightPath(knightPath).then(async () => {
 		endPoint.classList.remove("king");
 		Knight.logPath(knightPath);
-		knight.currentPosition = knight.end;
-		knight.start = null;
-		knight.end = null;
 		await sleep(500);
-		clearTrail();
-		viewStats(moves, knightPath);
-		endPoint.classList.remove("check");
-		board.classList.remove("disable");
+		resetState();
+		updateUI(moves, knightPath, endPoint);
 	});
 }
 
@@ -105,5 +107,3 @@ function setSquareCoordinates() {
 setSquareCoordinates();
 
 board.addEventListener("click", (e) => handleSquareClick(e));
-
-// add place knight, traversing
