@@ -61,7 +61,8 @@ main {
 }
 
 .square {
-	aspect-ratio: 1/1; /* make the squares square-shaped */
+	/* make the squares square-shaped */
+	aspect-ratio: 1/1;
 	cursor: pointer;
 	position: relative;
 
@@ -106,6 +107,10 @@ main {
 		rgba(169, 0, 0, 0) 89%,
 		rgba(158, 0, 0, 0) 100%
 	);
+}
+
+.square.trail {
+	background-color: rgba(94, 184, 226, 0.45);
 }
 
 .modal-container {
