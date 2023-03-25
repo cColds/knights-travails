@@ -1,2 +1,3 @@
 import "./knights-travails";
-import "./dom";
+import "./DOM/audio";
+import "./DOM/dom";

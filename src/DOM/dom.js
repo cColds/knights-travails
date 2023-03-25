@@ -1,6 +1,6 @@
-import Knight from "./knights-travails";
+import Knight from "../knights-travails";
 import { move, check, capture, victory, playSound } from "./audio";
-import viewStats from "./modal";
+import viewStats from "../modal";
 
 const board = document.querySelector(".board");
 const knight = new Knight();
