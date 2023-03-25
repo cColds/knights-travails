@@ -21,6 +21,7 @@ async function animateKnightPath(knightPath) {
 			`[data-coordinates='[${knightPath[i]}]']`
 		);
 		currentKnightSpritePosition.classList.remove("knight");
+		nextKnightSpritePosition.classList.add("trail");
 		nextKnightSpritePosition.classList.add("knight");
 
 		const isEndPoint = i === knightPath.length - 1;
@@ -36,6 +37,7 @@ async function animateKnightPath(knightPath) {
 
 			nextKnightSpritePosition.classList.remove("knight");
 			knightSpriteEndPoint.classList.add("knight");
+			knightSpriteEndPoint.classList.add("trail");
 
 			sleep(500).then(() => {
 				playSound(victory);
@@ -48,6 +50,11 @@ async function animateKnightPath(knightPath) {
 		}
 	}
 	return Promise.all(promises);
+}
+
+function clearTrail() {
+	const squaresTrailed = document.querySelectorAll(".trail");
+	squaresTrailed.forEach((square) => square.classList.remove("trail"));
 }
 
 function handleSquareClick(e) {
@@ -78,8 +85,8 @@ function handleSquareClick(e) {
 		knight.currentPosition = knight.end;
 		knight.start = null;
 		knight.end = null;
-
 		await sleep(500);
+		clearTrail();
 		viewStats(moves, knightPath);
 		endPoint.classList.remove("check");
 		board.classList.remove("disable");
@@ -99,5 +106,4 @@ setSquareCoordinates();
 
 board.addEventListener("click", (e) => handleSquareClick(e));
 
-// TODO: Clean code
-// TODO: Update UI
+// add place knight, traversing
