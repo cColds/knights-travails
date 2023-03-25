@@ -4,7 +4,7 @@ body {
 }
 
 :root {
-	--square-size: calc(100% / 8);
+	--light-blue: #93c5fd;
 }
 
 *,
@@ -15,12 +15,22 @@ body {
 	box-sizing: border-box;
 }
 
+@font-face {
+	font-family: VarelaRound;
+	src: url("./assets/VarelaRound-Regular.ttf");
+}
+
 body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
 	padding: 1rem;
+	background-color: #93c5fd;
+	font-family: VarelaRound, system-ui, -apple-system, BlinkMacSystemFont,
+		"Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+		"Helvetica Neue", sans-serif;
+	color: white;
 }
 
 header {
@@ -29,16 +39,21 @@ header {
 	position: fixed;
 	top: 0;
 	width: 100%;
+	padding-top: 1rem;
+	font-size: clamp(1rem, 3.5vw, 1.5rem);
+	text-align: center;
 }
 
 main {
 	display: grid;
 	grid-template-columns: repeat(8, 1fr);
 	grid-template-rows: repeat(8, calc(100% / 8));
-	/*Have to use 100% instead of 90% to fix overflow? */
+	/* Have to use 100% instead of 90% to fix overflow? */
 	width: clamp(150px, 100%, 800px);
-	background-image: url("./assets/chessboard.svg");
+	background-image: url("https://www.chess.com/boards/icy_sea/150.png");
+	background-size: contain;
 	position: relative;
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .board.disable {
@@ -70,8 +85,7 @@ main {
 	width: 30%;
 	height: 30%;
 	border-radius: 50%;
-	background-color: rgb(0, 0, 0);
-	opacity: 0.1;
+	background-color: rgba(0, 0, 0, 0.1);
 	display: none;
 }
 
@@ -121,7 +135,7 @@ main {
 	display: flex;
 	flex-direction: column;
 
-	padding: 0.5em 1em;
+	padding: 1em;
 	border-radius: 5px;
 	background-color: #fff;
 	opacity: 0;
@@ -131,6 +145,7 @@ main {
 	width: clamp(250px, 90%, 500px);
 	backdrop-filter: blur(5px);
 	-webkit-backdrop-filter: blur(5px);
+	background-color: #474849;
 }
 
 .modal-container.active {
@@ -153,21 +168,36 @@ main {
 .modal-heading {
 	display: flex;
 	justify-content: space-between;
-	padding-bottom: 5px;
-}
-
-.modal-heading-text {
 }
 
 .close-modal {
 	cursor: pointer;
-	fill: black;
 	width: 24px;
+	fill: white;
 }
 
 .modal-content {
-	padding: 1rem 0;
+	padding-top: 0.75rem;
 	display: flex;
 	flex-direction: column;
 	gap: 1rem;
+}
+
+.modal-content button {
+	color: inherit;
+	font-weight: bold;
+	border-radius: 5px;
+	cursor: pointer;
+	padding: 1em;
+	color: white;
+}
+
+.new-game {
+	background-color: var(--light-blue);
+	border: 0;
+}
+
+.resume-game {
+	background-color: transparent;
+	border: 2px solid white;
 }
