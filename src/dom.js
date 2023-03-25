@@ -1,5 +1,6 @@
 import Knight from "./knights-travails";
 import { move, check, capture, victory, playSound } from "./audio";
+import viewStats from "./modal";
 
 const board = document.querySelector(".board");
 const knight = new Knight();
@@ -30,9 +31,10 @@ async function animateKnightPath(knightPath) {
 			playSound(capture);
 
 			nextKnightSpritePosition.classList.remove("knight");
-			document
-				.querySelector(`[data-coordinates='[${knightPath[i + 1]}]']`)
-				.classList.add("knight");
+			const knightSpriteEndPoint = document.querySelector(
+				`[data-coordinates='[${knightPath[i + 1]}]']`
+			);
+			knightSpriteEndPoint.classList.add("knight");
 
 			sleep(500).then(() => {
 				playSound(victory);
@@ -67,13 +69,16 @@ function handleSquareClick(e) {
 	endPoint.classList.add("king");
 
 	const knightPath = knight.move(knight.start, knight.end);
-	animateKnightPath(knightPath).then(() => {
+	const moves = knightPath.length - 1;
+	animateKnightPath(knightPath).then(async () => {
 		endPoint.classList.remove("king");
 		Knight.logPath(knightPath);
 		knight.currentPosition = knight.end;
 		knight.start = null;
 		knight.end = null;
 
+		await sleep(500);
+		viewStats(moves, knightPath);
 		board.classList.remove("disable");
 	});
 }
