@@ -10,13 +10,17 @@ function setStartAndEndCoordinates(e) {
 	knight.end = JSON.parse(e.target.dataset.coordinates);
 }
 
+function resetState() {
+	knight.currentPosition = knight.end;
+	knight.start = null;
+	knight.end = null;
+}
+
 const sleep = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function animateKnightPath(knightPath) {
-	const promises = [];
 	const getNextPosition = (i) =>
 		document.querySelector(`[data-coordinates='[${knightPath[i]}]']`);
-
 	for (let i = 0; i < knightPath.length; i += 1) {
 		const currentPosition = document.querySelector(".knight");
 		const nextPosition = getNextPosition(i);
@@ -24,7 +28,6 @@ async function animateKnightPath(knightPath) {
 
 		currentPosition.classList.remove("knight");
 		nextPosition.classList.add("knight", "trail");
-
 		if (isKingInCheck) {
 			const endPoint = getNextPosition(i + 1);
 			endPoint.classList.add("check");
@@ -37,25 +40,17 @@ async function animateKnightPath(knightPath) {
 			sleep(500).then(() => {
 				playSound(victory);
 			});
-
 			break;
 		} else {
-			promises.push(await sleep(500));
+			await sleep(500);
 			await playSound(move);
 		}
 	}
-	return Promise.all(promises);
 }
 
 function clearTrail() {
 	const squaresTrailed = document.querySelectorAll(".trail");
 	squaresTrailed.forEach((square) => square.classList.remove("trail"));
-}
-
-function resetState() {
-	knight.currentPosition = knight.end;
-	knight.start = null;
-	knight.end = null;
 }
 
 function updateUI(moves, knightPath, endPoint) {
@@ -65,7 +60,7 @@ function updateUI(moves, knightPath, endPoint) {
 	board.classList.remove("disable");
 }
 
-function handleSquareClick(e) {
+async function handleSquareClick(e) {
 	if (!e.target.classList.contains("square")) return;
 	if (e.target.classList.contains("knight")) return;
 
@@ -86,13 +81,13 @@ function handleSquareClick(e) {
 
 	const knightPath = knight.move(knight.start, knight.end);
 	const moves = knightPath.length - 1;
-	animateKnightPath(knightPath).then(async () => {
-		endPoint.classList.remove("king");
-		Knight.logPath(knightPath);
-		await sleep(500);
-		resetState();
-		updateUI(moves, knightPath, endPoint);
-	});
+
+	await animateKnightPath(knightPath);
+	endPoint.classList.remove("king");
+	Knight.logPath(knightPath);
+	await sleep(500);
+	resetState();
+	updateUI(moves, knightPath, endPoint);
 }
 
 function setSquareCoordinates() {

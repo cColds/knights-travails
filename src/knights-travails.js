@@ -30,7 +30,7 @@ export default class Knight {
 			end.length === 2 &&
 			!Knight.isOutOfBounds(start) &&
 			!Knight.isOutOfBounds(end)
-		); // there is bug if you nest arrays
+		);
 	}
 
 	getPossibleMoves() {
