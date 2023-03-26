@@ -1,3 +1,3 @@
-# knights-travails
+# Knights Travails
 
-[Knights Travails](https://wikipedia.org/knights-travails)
+[Live Preview](https://wikipedia.org/knights-travails)
