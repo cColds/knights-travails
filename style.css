@@ -22,8 +22,6 @@ body {
 
 body {
 	display: flex;
-	justify-content: center;
-	align-items: center;
 	flex-direction: column;
 	padding: 1rem;
 	background-color: #93c5fd;
@@ -34,12 +32,7 @@ body {
 }
 
 header {
-	display: flex;
-	justify-content: center;
-	position: fixed;
-	top: 0;
-	width: 100%;
-	padding-top: 1rem;
+	padding: 1rem;
 	font-size: clamp(1rem, 3.5vw, 1.5rem);
 	text-align: center;
 }
@@ -49,6 +42,7 @@ main {
 	display: flex;
 	justify-content: center;
 	gap: 1rem;
+	padding: 1rem;
 }
 
 .knight-info {
@@ -59,7 +53,7 @@ main {
 	display: grid;
 	grid-template-columns: repeat(8, 1fr);
 	grid-template-rows: repeat(8, calc(100% / 8));
-	width: clamp(150px, 100%, 800px);
+	width: min(100vw, 500px);
 	background-image: url("https://www.chess.com/boards/icy_sea/150.png");
 	background-size: contain;
 	position: relative;
