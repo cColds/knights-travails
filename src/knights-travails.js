@@ -90,7 +90,7 @@ export default class Knight {
 				this.board[x][y] = this.currentPosition;
 			});
 
-			this.currentPosition = queue[0];
+			[this.currentPosition] = queue;
 		}
 		return this.getPath(start, end);
 	}

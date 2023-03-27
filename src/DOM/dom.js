@@ -18,18 +18,19 @@ function resetState() {
 
 const sleep = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const getNextPosition = (i, knightPath) =>
+	document.querySelector(`[data-coordinates='[${knightPath[i]}]']`);
+
 async function animateKnightPath(knightPath) {
-	const getNextPosition = (i) =>
-		document.querySelector(`[data-coordinates='[${knightPath[i]}]']`);
 	for (let i = 0; i < knightPath.length; i += 1) {
 		const currentPosition = document.querySelector(".knight");
-		const nextPosition = getNextPosition(i);
+		const nextPosition = getNextPosition(i, knightPath);
 		const isKingInCheck = i === knightPath.length - 2;
 
 		currentPosition.classList.remove("knight");
 		nextPosition.classList.add("knight", "trail");
 		if (isKingInCheck) {
-			const endPoint = getNextPosition(i + 1);
+			const endPoint = getNextPosition(i + 1, knightPath);
 			endPoint.classList.add("check");
 			await playSound(check);
 			playSound(capture);
@@ -99,6 +100,7 @@ function setSquareCoordinates() {
 		}
 	}
 }
+
 setSquareCoordinates();
 
-board.addEventListener("click", (e) => handleSquareClick(e));
+board.addEventListener("click", handleSquareClick);

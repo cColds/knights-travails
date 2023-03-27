@@ -125,6 +125,11 @@ main {
 	display: none;
 }
 
+.modal-container.active {
+	z-index: 1;
+	display: block;
+}
+
 .modal-container.active .overlay {
 	opacity: 1;
 	pointer-events: auto;
@@ -156,11 +161,6 @@ main {
 	backdrop-filter: blur(5px);
 	-webkit-backdrop-filter: blur(5px);
 	background-color: #474849;
-}
-
-.modal-container.active {
-	z-index: 1;
-	display: block;
 }
 
 .overlay {
