@@ -22,7 +22,7 @@ function convertToChessNotation([x, y]) {
 
 function setCheckmateInNumberMoves(moves) {
 	const isMovePlural = moves === 1 ? "move" : "moves";
-	checkmateInNumberMoves.textContent = `Checkmate in ${moves} ${isMovePlural}`;
+	checkmateInNumberMoves.textContent = `You made it in ${moves} ${isMovePlural}!`;
 }
 
 function setPathText(path) {
